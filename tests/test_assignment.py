@@ -1,5 +1,5 @@
 import pytest
-from assignment import Assignment
+from app.assignment import Assignment
 
 @pytest.fixture
 def unpopulated_assignment():
@@ -18,24 +18,26 @@ def test_assignment_init():
     assert assignment.name == 'Nouns'
 
 def test_assignment_submit_assignment(unpopulated_assignment):
-    # These ones should be acceptable
-    result = unpopulated_assignment.submit_assignment(123, 98)
-    assert result == True
-    result = unpopulated_assignment.submit_assignment(124, 100)
-    assert result == True
-    result = unpopulated_assignment.submit_assignment(125, 0)
-    assert result == True
-    result = unpopulated_assignment.submit_assignment(126, 50)
-    assert result == True
+    # Check only [0, 100] is accepted
+    assert unpopulated_assignment.submit_assignment(123, 98)
+    assert unpopulated_assignment.submit_assignment(124, 100)
+    assert unpopulated_assignment.submit_assignment(125, 0)
+    assert unpopulated_assignment.submit_assignment(126, 50)
+    assert not unpopulated_assignment.submit_assignment(127, -1)
+    assert not unpopulated_assignment.submit_assignment(128, 101)
 
-    # These ones shouldn't be acceptable
-    result = unpopulated_assignment.submit_assignment(125, -1)
-    assert result == False
-    result = unpopulated_assignment.submit_assignment(126, 101)
-    assert result == False
+    # Check assignment is overwritten
+    assert unpopulated_assignment.submit_assignment(125, 27)
+    assert unpopulated_assignment.student_grades[125] == 27
 
 def test_assignment_assignment_grade_avg_no_students(unpopulated_assignment):
     assert unpopulated_assignment.get_assignment_grade_avg() is None
+
+def test_assignment_assignment_grade_avg_missing_assignments(populated_assignment):
+    populated_assignment.get_assignment_grade_avg([123, 124]) == 98
+    populated_assignment.get_assignment_grade_avg([125]) == 0
+    populated_assignment.get_assignment_grade_avg([124, 125]) == 49
+    populated_assignment.get_assignment_grade_avg([123, 124, 125, 100, 101]) == 39
 
 def test_assignment_assignment_grade_avg(populated_assignment):
     populated_assignment.submit_assignment(125, 98)
@@ -50,8 +52,8 @@ def test_assignment_student_dropout(populated_assignment):
 
 def test_assignment_student_dropout_2(populated_assignment):
     result = populated_assignment.dropout_student(125)
-    assert result == True
+    assert result
     result = populated_assignment.dropout_student(125)
-    assert result == False
+    assert not result
     result = populated_assignment.dropout_student(126)
-    assert result == False
+    assert not result
