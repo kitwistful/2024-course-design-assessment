@@ -167,6 +167,7 @@ def test_get_top_five_students_eoy(eoy_course):
     # Test for > 5 students and assignments submitted.
     top_five_students = eoy_course.get_top_five_students()
     assert len(top_five_students) == 5
+    assert set(top_five_students) == {124, 123, 125, 1005, 1004}
 
     # Test for == 5 students
     for i in range(1002, 1006):

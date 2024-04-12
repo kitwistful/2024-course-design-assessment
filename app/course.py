@@ -77,8 +77,8 @@ class Course:
         """
         Returns the IDs of the top 5 students based on their average grades of all assignments.
         """
-        grade_averages = {s: self.get_student_grade_avg(s) for s in self.students if self.get_student_grade_avg(s) is not None}
-        return list(sorted(grade_averages, reverse=True))[0:5]
+        grade_averages = {s: self.get_student_grade_avg(s) for s in self.students if self.get_student_grade_avg(s) is not None}.items()
+        return list([x[0] for x in sorted(grade_averages, key=lambda y: y[1], reverse=True)])[0:5]
 
 
 
