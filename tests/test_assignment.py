@@ -34,6 +34,7 @@ def test_assignment_assignment_grade_avg_no_students(unpopulated_assignment):
     assert unpopulated_assignment.get_assignment_grade_avg() is None
 
 def test_assignment_assignment_grade_avg_missing_assignments(populated_assignment):
+    # Uses the 'students' param to test subsets and supersets of submitted assignments.
     populated_assignment.get_assignment_grade_avg([123, 124]) == 98
     populated_assignment.get_assignment_grade_avg([125]) == 0
     populated_assignment.get_assignment_grade_avg([124, 125]) == 49
@@ -45,15 +46,12 @@ def test_assignment_assignment_grade_avg(populated_assignment):
     populated_assignment.submit_assignment(125, 0)
     assert populated_assignment.get_assignment_grade_avg() == 65
 
-def test_assignment_student_dropout(populated_assignment):
+def test_assignment_student_dropout_affects_grade_average(populated_assignment):
     assert populated_assignment.get_assignment_grade_avg() == 65
     populated_assignment.dropout_student(125)
     assert populated_assignment.get_assignment_grade_avg() == 98
 
-def test_assignment_student_dropout_2(populated_assignment):
-    result = populated_assignment.dropout_student(125)
-    assert result
-    result = populated_assignment.dropout_student(125)
-    assert not result
-    result = populated_assignment.dropout_student(126)
-    assert not result
+def test_assignment_student_dropout_fail_cases(populated_assignment):
+    assert populated_assignment.dropout_student(125)
+    assert not populated_assignment.dropout_student(125)
+    assert not populated_assignment.dropout_student(126)

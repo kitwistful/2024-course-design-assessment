@@ -1,15 +1,13 @@
 from app.assignment import Assignment
-from typing import List
+from typing import List, Dict
 from statistics import fmean
 
 class Course:
     def __init__(self, name):
         self.name = name
-        # Student ids must be ints.
-        self.students = []
-        # list of Assignments. 
-        self.assignments = {}
-        self.assignment_id_iteration = 0
+        self.students: List[int] = []
+        self.assignments: Dict[int, Assignment] = {}
+        self.assignment_id_iteration = 0 # This is used to generate assignment_ids.
     
     def create_assignment(self, assignment_name) -> int:
         """
@@ -65,8 +63,8 @@ class Course:
     def get_student_grade_avg(self, student_id) -> int:
         """
         Returns the average grade for a student in a course. Floors the result to the nearest integer.
-        Returns None if the student has no assignments submitted.
         Throws a KeyError if the student is not enrolled in the course.
+        Returns None if the student has no assignments submitted.
         """
         if student_id not in self.students:
             raise KeyError()

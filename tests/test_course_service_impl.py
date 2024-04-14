@@ -1,10 +1,10 @@
 import pytest
-# TODO: test it with CourseService interface
 from app.course_service_impl import CourseServiceImpl
+from app.course_service import CourseService
 
 # --- fixtures
 @pytest.fixture
-def unpopulated_course_service():
+def unpopulated_course_service() -> CourseService:
     return CourseServiceImpl()
     
 @pytest.fixture
@@ -14,7 +14,7 @@ def fresh_course_service(unpopulated_course_service):
     unpopulated_course_service.create_course('Sociology')
     return unpopulated_course_service
 
-# "Start Of Year"
+# "Start Of Year" - no assignments submitted.
 @pytest.fixture
 def soy_course_service(fresh_course_service):
     # Assignments
@@ -31,27 +31,27 @@ def soy_course_service(fresh_course_service):
     fresh_course_service.create_assignment(2, 'Case Study I')
 
     # Students
-    assert fresh_course_service.enroll_student(0, 123)
-    assert fresh_course_service.enroll_student(0, 124)
-    assert fresh_course_service.enroll_student(0, 125)
-    assert fresh_course_service.enroll_student(0, 1000)
-    assert fresh_course_service.enroll_student(0, 1001)
-    assert fresh_course_service.enroll_student(0, 1003)
-    assert fresh_course_service.enroll_student(0, 1005)
-    assert fresh_course_service.enroll_student(1, 123)
-    assert fresh_course_service.enroll_student(1, 124)
-    assert fresh_course_service.enroll_student(1, 1000)
-    assert fresh_course_service.enroll_student(1, 1003)
-    assert fresh_course_service.enroll_student(1, 1004)
-    assert fresh_course_service.enroll_student(2, 123)
-    assert fresh_course_service.enroll_student(2, 125)
-    assert fresh_course_service.enroll_student(2, 1000)
-    assert fresh_course_service.enroll_student(2, 1001)
-    assert fresh_course_service.enroll_student(2, 1002)
+    fresh_course_service.enroll_student(0, 123)
+    fresh_course_service.enroll_student(0, 124)
+    fresh_course_service.enroll_student(0, 125)
+    fresh_course_service.enroll_student(0, 1000)
+    fresh_course_service.enroll_student(0, 1001)
+    fresh_course_service.enroll_student(0, 1003)
+    fresh_course_service.enroll_student(0, 1005)
+    fresh_course_service.enroll_student(1, 123)
+    fresh_course_service.enroll_student(1, 124)
+    fresh_course_service.enroll_student(1, 1000)
+    fresh_course_service.enroll_student(1, 1003)
+    fresh_course_service.enroll_student(1, 1004)
+    fresh_course_service.enroll_student(2, 123)
+    fresh_course_service.enroll_student(2, 125)
+    fresh_course_service.enroll_student(2, 1000)
+    fresh_course_service.enroll_student(2, 1001)
+    fresh_course_service.enroll_student(2, 1002)
 
     return fresh_course_service
 
-# "End Of Year"
+# "End Of Year" - assignments have been submitted.
 @pytest.fixture
 def eoy_course_service(soy_course_service):
     for course_id, course in soy_course_service.courses.items():

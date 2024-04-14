@@ -4,7 +4,11 @@ You are asked to design a course management system. This system will help the fa
 
 ## Notes on solution
 
-I used pytest to unit test in this instance. The command I used was `pytest`
+I used pytest to unit test in this instance. The command I used was `pytest`.
+
+To install, run `pip install -r requirements.txt".
+
+When it comes to certain edge cases, e.g. student_id that does not exist, assignment that has not yet been submitted, I attempted to enforce some consistency. For example, attempting to pull data for an id that does not exist will generally throw a KeyError, while assignments that have recieved no assignments will render their grades/grade averages as being None.
 
 # Original Document
 

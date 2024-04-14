@@ -2,15 +2,13 @@ from app.course_service import CourseService
 from app.course import Course
 from typing import List, Any, Dict
 
-# TODO: fix this
-# class CourseServiceImpl(CourseService):
-class CourseServiceImpl:
+class CourseServiceImpl(CourseService):
     """
-    Please implement the CourseService interface according to the requirements.
+    Implementation of CourseService, using in-memory data structures.
     """
     def __init__(self):
         self.courses: Dict[int, Course] = {}
-        self.course_id_iteration = -1
+        self.course_id_iteration = -1 # This is used to generate course ids.
 
     def get_courses(self) -> List[Any]:
         """
@@ -47,22 +45,23 @@ class CourseServiceImpl:
     def create_assignment(self, course_id, assignment_name) -> int:
         """
         Creates a new assignment for a course.
-        Returns the id of the new assignment.
         Throws a KeyError if the course does not exist.
+        Returns the id of the new assignment.
         """
         return self.courses[course_id].create_assignment(assignment_name)
 
     def enroll_student(self, course_id, student_id) -> bool:
         """
         Enrolls a student in a course.
-        Returns True if the student was enrolled successfully, otherwise False.
         Throws a KeyError if the course does not exist.
+        Returns True if the student was enrolled successfully, otherwise False.
         """
         return self.courses[course_id].enroll_student(student_id)
 
     def dropout_student(self, course_id, student_id) -> bool:
         """
         Drops a student from a course.
+        Throws a KeyError if the course does not exist.
         Returns True if the student was dropped successfully, otherwise False.
         """
         return self.courses[course_id].dropout_student(student_id)
@@ -70,6 +69,7 @@ class CourseServiceImpl:
     def submit_assignment(self, course_id, student_id, assignment_id, grade: int) -> bool:
         """
         Submits an assignment for a student. A grade of an assignment will be an integer between 0 and 100 inclusive.
+        Throws a KeyError if the course does not exist.
         Returns True if the assignment was submitted successfully, otherwise False.
         """
         return self.courses[course_id].submit_assignment(student_id, assignment_id, grade)
@@ -77,6 +77,8 @@ class CourseServiceImpl:
     def get_assignment_grade_avg(self, course_id, assignment_id) -> int:
         """
         Returns the average grade for an assignment. Floors the result to the nearest integer.
+        Throws a KeyError if the course does not exist.
+        If no assignments have been submitted yet, returns None.
         """
         print(self.courses[course_id].assignments[assignment_id].student_grades)
         return self.courses[course_id].get_assignment_grade_avg(assignment_id)
@@ -84,11 +86,14 @@ class CourseServiceImpl:
     def get_student_grade_avg(self, course_id, student_id) -> int:
         """
         Returns the average grade for a student in a course. Floors the result to the nearest integer.
+        Throws a KeyError if the course does not exist.
+        If no assignments have been submitted yet, returns None.
         """
         return self.courses[course_id].get_student_grade_avg(student_id)
 
     def get_top_five_students(self, course_id) -> List[int]:
         """
         Returns the IDs of the top 5 students in a course based on their average grades of all assignments.
+        Throws a KeyError if the course does not exist.
         """
         return self.courses[course_id].get_top_five_students()

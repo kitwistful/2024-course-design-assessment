@@ -3,7 +3,6 @@ from typing import Dict
 
 class Assignment:
     def __init__(self, name):
-        # This is different from the assignment id used by course/course service
         self.name = name
         self.student_grades: Dict[int, int] = {}
 
